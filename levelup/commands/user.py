@@ -55,9 +55,9 @@ async def view_profile_context(interaction: discord.Interaction, member: discord
 
 
 class User(MixinMeta):
-    @commands.hybrid_command(name="leveltop", aliases=["lvltop", "topstats", "membertop", "topranks"])
+    @commands.hybrid_command(name="LeaderBoard", aliases=["lb", "LB", "levels", "topranks"])
     @commands.guild_only()
-    async def leveltop(
+    async def LeaderBoard(
         self,
         ctx: commands.Context,
         stat: str = "xp",
