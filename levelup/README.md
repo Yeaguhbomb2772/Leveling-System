@@ -63,8 +63,8 @@ Set channel to announce weekly winners<br/>
 ## [p]weeklyset view
 View the current weekly settings<br/>
  - Usage: `[p]weeklyset view`
-# [p]leveltop (Hybrid Command)
-View the LevelUp leaderboard<br/>
+# [p]leaderboard (Hybrid Command)
+View the server leaderboard<br/>
 
 **Arguments**<br/>
 `stat` - The stat to view the leaderboard for, defaults to `exp` but can be any of the following:<br/>
@@ -75,9 +75,9 @@ View the LevelUp leaderboard<br/>
 - `stars` - Stars<br/>
 `globalstats` - View the global leaderboard instead of the server leaderboard<br/>
 `displayname` - Use display names instead of usernames<br/>
- - Usage: `[p]leveltop [stat=xp] [globalstats=False] [displayname=True]`
- - Slash Usage: `/leveltop [stat=xp] [globalstats=False] [displayname=True]`
- - Aliases: `lvltop, topstats, membertop, and topranks`
+ - Usage: `[p]leaderboard [stat=xp] [globalstats=False] [displayname=True]`
+ - Slash Usage: `/leaderboard [stat=xp] [globalstats=False] [displayname=True]`
+ - Aliases: `lvltop, lb, membertop, and topranks`
  - Checks: `server_only`
 # [p]roletop
 View the leaderboard for roles<br/>
@@ -249,7 +249,7 @@ Get the folder paths for this cog's backgrounds<br/>
  - Slash Usage: `/setprofile bgpath`
  - Restricted to: `BOT_OWNER`
 # [p]stars (Hybrid Command)
-Reward a good noodle<br/>
+Reward an outstanding member<br/>
  - Usage: `[p]stars [user]`
  - Slash Usage: `/stars [user]`
  - Aliases: `givestar, addstar, and thanks`
