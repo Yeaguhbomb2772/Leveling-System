@@ -156,7 +156,7 @@ def get_leaderboard(
                     lb[user_id].xp += profile.prestige * guild_conf.algorithm.get_xp(guild_conf.prestigelevel)
                     lb[user_id].level += profile.prestige * guild_conf.prestigelevel
     elif "xp" in stat and conf.prestigelevel and conf.prestigedata:
-        title = _("LevelUp ")
+        title = _("Attack on Ai ")
         lb = {}
         for user_id in conf.users.keys():
             profile: Profile = conf.users[user_id]
@@ -165,7 +165,7 @@ def get_leaderboard(
                 lb[user_id].xp += profile.prestige * conf.algorithm.get_xp(conf.prestigelevel)
                 lb[user_id].level += profile.prestige * conf.prestigelevel
     else:
-        title = _("LevelUp ")
+        title = _("Attack on Ai ")
         lb = db.get_conf(guild).users.copy()
 
     if "v" in stat:
@@ -184,7 +184,7 @@ def get_leaderboard(
         emoji = conf.emojis.get("star", bot)
         statname = _("Stars")
     else:
-        title += _("Exp Leaderboard")
+        title += _("Leaderboard")
         key = "xp"
         emoji = conf.emojis.get("bulb", bot)
         statname = _("Experience")
