@@ -185,7 +185,7 @@ class User(MixinMeta):
         if user.id == ctx.author.id and profile.show_tutorial:
             # New user, tell them about how they can customize their profile
             new_user_txt = _(
-                "Welcome to LevelUp!\n"
+                "Welcome to Attack on Ai!\n"
                 "Use {} to view your profile settings and the available customization commands!\n"
                 "*You can use {} to view your profile settings at any time*"
             ).format(f"`{ctx.clean_prefix}setprofile`", f"`{ctx.clean_prefix}setprofile view`")
