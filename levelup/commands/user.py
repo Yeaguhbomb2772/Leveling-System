@@ -60,7 +60,7 @@ class User(MixinMeta):
     async def leaderboard(
         self,
         ctx: commands.Context,
-        stat: str = "xp",
+        stat: str = "level",
         globalstats: bool = False,
         displayname: bool = True,
     ):
@@ -77,6 +77,17 @@ class User(MixinMeta):
         `displayname` - Use display names instead of usernames
         """
         stat = stat.lower()
+        
+        if stat in ["level", "lvl", "levels"]:
+            stat = "level"
+        elif stat in ["voice", "v", "vc"]:
+            stat = "voice"
+        elif stat in ["messages", "m", "msg"]:
+            stat = "messages"
+        elif stat in ["stars", "s", "star"]:
+            stat = "stars"
+        else:
+            stat = "xp"
         pages = await asyncio.to_thread(
             formatter.get_leaderboard,
             bot=self.bot,

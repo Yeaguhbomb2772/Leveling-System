@@ -168,27 +168,38 @@ def get_leaderboard(
         title = _("Attack on Ai ")
         lb = db.get_conf(guild).users.copy()
 
-    if "v" in stat:
+    if stat in ["voice", "v", "vc"]:
         title += _("Voice Leaderboard")
         key = "voice"
         emoji = conf.emojis.get("mic", bot)
         statname = _("Voicetime")
-    elif "m" in stat:
+    elif stat in ["messages", "m", "msg"]:
         title += _("Message Leaderboard")
         key = "messages"
         emoji = conf.emojis.get("chat", bot)
         statname = _("Messages")
-    elif "s" in stat:
+    elif stat in ["stars", "s", "star"]:
         title += _("Star Leaderboard")
         key = "stars"
         emoji = conf.emojis.get("star", bot)
         statname = _("Stars")
+    elif stat in ["level", "lvl", "levels"]:
+        title += _("Level Leaderboard")
+        key = "xp"
+        emoji = conf.emojis.get("bulb", bot)
+        statname = _("Level")
     else:
         title += _("Leaderboard")
         key = "xp"
         emoji = conf.emojis.get("bulb", bot)
         statname = _("Experience")
 
+    embed = discord.Embed(title=title, color=color)
+    if stat not in ["level", "lvl", "levels"]:
+        total_stat = sum(getattr(u, key, 0) for u in lb.values())
+        embed.description = _("Total {stat}: {total}").format(stat=statname, total=total_stat)
+    else:
+        embed.description = None
     if is_global:
         valid_users: t.Dict[int, t.Union[Profile, ProfileWeekly]] = {k: v for k, v in lb.items() if bot.get_user(k)}
     else:
@@ -298,12 +309,14 @@ def get_leaderboard(
             place = i + 1
             if key == "voice":
                 stat = utils.humanize_delta(round(getattr(stats, key)))
+            elif stat in ["level", "lvl", "levels"]:
+                stat = f"Level {stats.level}"
             else:
                 stat = utils.abbreviate_number(round(getattr(stats, key)))
                 if key == "xp" and lbtype != "weekly" and not is_global:
-                    stat += f" 🎖{stats.level}"
+                    value_str += f" 🎖{stats.level}"
 
-            buffer.write(f"**{place}**. {name} (`{stat}`)\n")
+            buffer.write(f"**{place}.** {name}: {value_str}\n")
 
         embed = discord.Embed(
             title=title,
