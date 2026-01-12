@@ -195,11 +195,21 @@ def get_leaderboard(
         statname = _("Experience")
 
     embed = discord.Embed(title=title, color=color)
-    if stat not in ["level", "lvl", "levels"]:
-        total_stat = sum(getattr(u, key, 0) for u in lb.values())
-        embed.description = _("Total {stat}: {total}").format(stat=statname, total=total_stat)
-    else:
+    
+    if s in ["level", "lvl", "levels"]:
         embed.description = None
+    else:
+        # Only run the math if we actually want to show the total
+        total_val = sum(getattr(u, key, 0) for u in lb.values())
+        if key == "voice":
+            readable_total = utils.humanize_delta(total_val)
+        else:
+            readable_total = utils.abbreviate_number(total_val)
+            
+        embed.description = _("Total {stat}: {total}").format(
+            stat=statname, 
+            total=readable_total
+        )
     if is_global:
         valid_users: t.Dict[int, t.Union[Profile, ProfileWeekly]] = {k: v for k, v in lb.items() if bot.get_user(k)}
     else:
@@ -319,7 +329,7 @@ def get_leaderboard(
                 if key == "xp" and lbtype != "weekly" and not is_global:
                     value_str += f" 🎖{getattr(stats, 'level', 0)}"
 
-            buffer.write(f"**{place}.** {name}: {value_str}\n")
+            buffer.write(f"**{place}.** {name}: (`{value_str}`)\n")
 
         embed = discord.Embed(
             title=title,
