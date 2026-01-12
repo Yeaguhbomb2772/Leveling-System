@@ -110,6 +110,7 @@ def get_leaderboard(
     color: discord.Color = discord.Color.random(),
     query: str = None,
 ) -> t.Union[t.List[discord.Embed], t.Dict[str, t.Any], str]:
+    s = stat.lower().strip() 
     """Format and return the leaderboard
 
     Args:
@@ -318,7 +319,6 @@ def get_leaderboard(
             name = (user_obj.display_name if use_displayname else user_obj.name) if user_obj else user_id
             place = i + 1
 
-            s = stat.lower().strip()
             if key == "voice":
                 value_str = utils.humanize_delta(round(getattr(stats, key, 0)))
             elif s in ["level", "lvl", "levels"]:
