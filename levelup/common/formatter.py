@@ -307,14 +307,17 @@ def get_leaderboard(
             user_obj = bot.get_user(user_id) if is_global else guild.get_member(user_id)
             name = (user_obj.display_name if use_displayname else user_obj.name) if user_obj else user_id
             place = i + 1
+
+            s = stat.lower().strip()
             if key == "voice":
-                stat = utils.humanize_delta(round(getattr(stats, key)))
-            elif stat in ["level", "lvl", "levels"]:
-                stat = f"Level {stats.level}"
+                value_str = utils.humanize_delta(round(getattr(stats, key, 0)))
+            elif s in ["level", "lvl", "levels"]:
+                value_str = f"Level {getattr(stats, 'level', 0)}"
             else:
-                stat = utils.abbreviate_number(round(getattr(stats, key)))
+                raw_val = getattr(stats, key, 0)
+                value_str = f"{utils.abbreviate_number(round(raw_val))}"
                 if key == "xp" and lbtype != "weekly" and not is_global:
-                    value_str += f" 🎖{stats.level}"
+                    value_str += f" 🎖{getattr(stats, 'level', 0)}"
 
             buffer.write(f"**{place}.** {name}: {value_str}\n")
 
