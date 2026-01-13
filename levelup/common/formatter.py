@@ -166,7 +166,7 @@ def get_leaderboard(
                 lb[user_id].xp += profile.prestige * conf.algorithm.get_xp(conf.prestigelevel)
                 lb[user_id].level += profile.prestige * conf.prestigelevel
     else:
-        title = _("Attack on Ai ")
+        title = _("『 Attack on Ai 』 ")
         lb = db.get_conf(guild).users.copy()
 
     if s in ["voice", "v", "vc"]:
@@ -190,7 +190,7 @@ def get_leaderboard(
         emoji = conf.emojis.get("bulb", bot)
         statname = _("Level")
     else:
-        title += _("Leaderboard")
+        title += _("XP Leaderboard")
         key = "xp"
         emoji = conf.emojis.get("bulb", bot)
         statname = _("Experience")
@@ -227,7 +227,7 @@ def get_leaderboard(
 
     sorted_users = sorted(filtered_users.items(), key=lambda x: getattr(x[1], key), reverse=True)
     usercount = len(sorted_users)
-    func = utils.humanize_delta if "v" in stat else humanize_number
+    func = utils.humanize_delta if s in ["voice", "v", "vc"] else humanize_number
     total: str = func(round(sum([getattr(x, key) for x in filtered_users.values()])))
 
     for idx, (user_id, stats) in enumerate(sorted_users):
