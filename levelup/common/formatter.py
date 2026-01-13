@@ -197,20 +197,21 @@ def get_leaderboard(
 
     embed = discord.Embed(title=title, color=color)
     
-    if s in ["level", "lvl", "levels"]:
-        embed.description = None
+    # Only run the math if we actually want to show the total
+    total_val = sum(getattr(u, key, 0) for u in lb.values())
+    if key == "voice":
+        readable_total = utils.humanize_delta(total_val)
     else:
-        # Only run the math if we actually want to show the total
-        total_val = sum(getattr(u, key, 0) for u in lb.values())
-        if key == "voice":
-            readable_total = utils.humanize_delta(total_val)
-        else:
-            readable_total = utils.abbreviate_number(total_val)
+        readable_total = utils.abbreviate_number(total_val)
             
-        embed.description = _("Total {stat}: {total}").format(
-            stat=statname, 
-            total=readable_total
-        )
+    embed.description = _("Total {stat}: {total}").format(
+        stat=statname, 
+        total=readable_total
+    )
+
+    if s in ["level", "lvl", "levels"] or statname == _("Level"):
+        embed.description = None
+    
     if is_global:
         valid_users: t.Dict[int, t.Union[Profile, ProfileWeekly]] = {k: v for k, v in lb.items() if bot.get_user(k)}
     else:
