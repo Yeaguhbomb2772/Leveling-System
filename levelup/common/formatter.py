@@ -128,7 +128,6 @@ def get_leaderboard(
     Returns:
         t.Union[t.List[discord.Embed], t.Dict[str, t.Any], str]: If called from dashboard returns a dict, else returns a list of embeds or a string
     """
-    stat = stat.lower()
     color = member.color if member else color
     conf = db.get_conf(guild)
     lb: t.Dict[int, t.Union[Profile, ProfileWeekly]]
@@ -157,7 +156,7 @@ def get_leaderboard(
                     lb[user_id].xp += profile.prestige * guild_conf.algorithm.get_xp(guild_conf.prestigelevel)
                     lb[user_id].level += profile.prestige * guild_conf.prestigelevel
     elif "xp" in stat and conf.prestigelevel and conf.prestigedata:
-        title = _("Attack on Ai ")
+        title = _("『 Attack on Ai 』")
         lb = {}
         for user_id in conf.users.keys():
             profile: Profile = conf.users[user_id]
@@ -197,11 +196,6 @@ def get_leaderboard(
 
     embed = discord.Embed(title=title, color=color)
     
-    if s not in ["level", "lvl", "levels"]:
-        total_val = sum(getattr(u, key, 0) for u in lb.values())
-        readable = utils.humanize_delta(total_val) if key == "voice" else utils.abbreviate_number(total_val)
-        embed.description = f"Total {statname}: {readable}"
-    
     if is_global:
         valid_users: t.Dict[int, t.Union[Profile, ProfileWeekly]] = {k: v for k, v in lb.items() if bot.get_user(k)}
     else:
@@ -230,9 +224,15 @@ def get_leaderboard(
 
     if lbtype == "weekly":
         if dashboard:
-            desc = _("➣ Total {}: {}\n").format(statname, f"`{total}`{emoji}")
+            if s not in ["level", "lvl", "levels"]:
+                desc = _("➣ Total {}: {}\n").format(statname, f"`{total}`{emoji}")
+            else:
+                desc = ""
         else:
-            desc = _("➣ **Total {}:** {}\n").format(statname, f"`{total}`{emoji}")
+            if s not in ["level", "lvl", "levels"]:
+                desc = _("➣ **Total {}:** {}\n").format(statname, f"`{total}`{emoji}")
+            else:
+                desc = ""
         if dashboard:
             if weekly.last_reset:
                 ts = datetime.fromtimestamp(weekly.last_reset).strftime("%m/%d/%Y @ %I:%M:%S %p")
@@ -252,9 +252,15 @@ def get_leaderboard(
         desc += "\n"
     else:
         if dashboard:
-            desc = _("Total {}: {}\n").format(statname, f"`{total}`{emoji}")
+            if s not in ["level", "lvl", "levels"]:
+                desc = _("Total {}: {}\n").format(statname, f"`{total}`{emoji}")
+            else:
+                desc = ""
         else:
-            desc = _("**Total {}:** {}\n\n").format(statname, f"`{total}`{emoji}")
+            if s not in ["level", "lvl", "levels"]:
+                desc = _("**Total {}:** {}\n\n").format(statname, f"`{total}`{emoji}")
+            else:
+                desc = "\n"
 
     if dashboard:
         # Format for when dashboard integration calls this function
