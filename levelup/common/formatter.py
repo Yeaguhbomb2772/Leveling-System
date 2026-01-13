@@ -169,22 +169,22 @@ def get_leaderboard(
         title = _("Attack on Ai ")
         lb = db.get_conf(guild).users.copy()
 
-    if stat in ["voice", "v", "vc"]:
+    if s in ["voice", "v", "vc"]:
         title += _("Voice Leaderboard")
         key = "voice"
         emoji = conf.emojis.get("mic", bot)
         statname = _("Voicetime")
-    elif stat in ["messages", "m", "msg"]:
+    elif s in ["messages", "m", "msg"]:
         title += _("Message Leaderboard")
         key = "messages"
         emoji = conf.emojis.get("chat", bot)
         statname = _("Messages")
-    elif stat in ["stars", "s", "star"]:
+    elif s in ["stars", "s", "star"]:
         title += _("Star Leaderboard")
         key = "stars"
         emoji = conf.emojis.get("star", bot)
         statname = _("Stars")
-    elif stat in ["level", "lvl", "levels"]:
+    elif s in ["level", "lvl", "levels"]:
         title += _("Level Leaderboard")
         key = "xp"
         emoji = conf.emojis.get("bulb", bot)
@@ -197,20 +197,19 @@ def get_leaderboard(
 
     embed = discord.Embed(title=title, color=color)
     
-    # Only run the math if we actually want to show the total
-    total_val = sum(getattr(u, key, 0) for u in lb.values())
-    if key == "voice":
-        readable_total = utils.humanize_delta(total_val)
-    else:
-        readable_total = utils.abbreviate_number(total_val)
-            
-    embed.description = _("Total {stat}: {total}").format(
-        stat=statname, 
-        total=readable_total
-    )
-
-    if s in ["level", "lvl", "levels"] or statname == _("Level"):
+    if s in ["level", "lvl", "levels"]:
         embed.description = None
+    else:
+        total_val = sum(getattr(u, key, 0) for u in lb.values())
+        if key == "voice":
+            readable_total = utils.humanize_delta(total_val)
+        else:
+            readable_total = utils.abbreviate_number(total_val)
+            
+        embed.description = _("Total {stat}: {total}").format(
+            stat=statname, 
+            total=readable_total
+        )
     
     if is_global:
         valid_users: t.Dict[int, t.Union[Profile, ProfileWeekly]] = {k: v for k, v in lb.items() if bot.get_user(k)}
