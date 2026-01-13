@@ -186,7 +186,7 @@ def get_leaderboard(
         statname = _("Stars")
     elif s in ["level", "lvl", "levels"]:
         title += _("Level Leaderboard")
-        key = "xp"
+        key = "level"
         emoji = conf.emojis.get("bulb", bot)
         statname = _("Level")
     else:
@@ -197,14 +197,9 @@ def get_leaderboard(
 
     embed = discord.Embed(title=title, color=color)
     
-    if s in ["level", "lvl", "levels"]:
-        # If it's levels, we do nothing. The description stays empty.
-        embed.description = None 
-    else:
-        # We ONLY do this part for XP, Voice, and Messages
+    if s not in ["level", "lvl", "levels"]:
         total_val = sum(getattr(u, key, 0) for u in lb.values())
         readable = utils.humanize_delta(total_val) if key == "voice" else utils.abbreviate_number(total_val)
-        
         embed.description = f"Total {statname}: {readable}"
     
     if is_global:
