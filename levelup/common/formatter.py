@@ -166,7 +166,7 @@ def get_leaderboard(
                 lb[user_id].xp += profile.prestige * conf.algorithm.get_xp(conf.prestigelevel)
                 lb[user_id].level += profile.prestige * conf.prestigelevel
     else:
-        title = _("『 Attack on Ai 』 ")
+        title = _("『 Attack on Ai 』")
         lb = db.get_conf(guild).users.copy()
 
     if s in ["voice", "v", "vc"]:
@@ -198,18 +198,14 @@ def get_leaderboard(
     embed = discord.Embed(title=title, color=color)
     
     if s in ["level", "lvl", "levels"]:
-        embed.description = None
+        # If it's levels, we do nothing. The description stays empty.
+        embed.description = None 
     else:
+        # We ONLY do this part for XP, Voice, and Messages
         total_val = sum(getattr(u, key, 0) for u in lb.values())
-        if key == "voice":
-            readable_total = utils.humanize_delta(total_val)
-        else:
-            readable_total = utils.abbreviate_number(total_val)
-            
-        embed.description = _("Total {stat}: {total}").format(
-            stat=statname, 
-            total=readable_total
-        )
+        readable = utils.humanize_delta(total_val) if key == "voice" else utils.abbreviate_number(total_val)
+        
+        embed.description = f"Total {statname}: {readable}"
     
     if is_global:
         valid_users: t.Dict[int, t.Union[Profile, ProfileWeekly]] = {k: v for k, v in lb.items() if bot.get_user(k)}
